@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>File Upload</title>
+    <script type="text/javascript">
+        function sendFile(file) {
+            var uri = "/file_upload";
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("POST", uri, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    // Handle response.
+                    alert(xhr.responseText); // handle response.
+                }
+            };
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                console.log(e.target.result);
+                //xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+                xhr.send(e.target.result);
+            };
+            //reader.readAsText(file);
+            reader.readAsArrayBuffer(file);
+        }
+
+        function sendFiles(){
+            var selectedFiles = document.getElementById("uploadFile").files,
+                    nFiles = selectedFiles.length;
+            if(nFiles>0) {
+                var file = selectedFiles[0];
+                sendFile(file);
+            }
+        }
+    </script>
+</head>
+
+<body>
+<!---
+<form name="uploadForm">
+    <p><input id="uploadFile" type="file" name="myFile" onchange="sendFiles();" single>
+    <p><input type="submit" value="Upload file"></p>
+</form>
+--->
+<div>
+    <p><input id="uploadFile" type="file" name="myFile" single></p>
+    <button type="button" onclick="sendFiles()">Upload</button>
+</div>
+
+</body>
+</html>
